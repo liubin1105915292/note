@@ -1,0 +1,28 @@
+1.下载manven
+2.配置maven环境   （1）MAVEN_HOME   (2)path:%MAVEN_HOME%\bin
+3.项目目录 src|pom.xml/main|test/java|resources
+
+命令
+
+maven骨架  maven archetype:generate  下载一些常用jar
+mvn compile 会自动编译 生成target文件  需要在项目路径下
+mvn test 会自动测试test目录下的文件
+mvn clean 删除targer文件，编译和打包后的文件都被清理
+mvn package 会把项目打成jar包
+
+在当前目录下执行 java -cp jar包 类完整名     运行java文件
+
+当某个项目引进另一个项目 在pom.xml依赖中写入  然后在被引入项目使用mvn install  在返回当前项目执行编译
+
+修改仓库repository的位置  在maven的安装目录的config找到setting
+
+中央仓库https://repo.maven.apache.org/maven2  在F:\maven-3.3.9\lib\maven-model-builder-3.3.9
+找到pom
+
+maven骨架 maven archetype:generate
+
+导入其他的maven工程只导入src和pom.xml
+
+
+
+netstat -ano | findStr "9999" 查看jetty服务

@@ -1,0 +1,49 @@
+可参考:https://blog.csdn.net/tanqian351/article/details/78246590
+
+1.创建组
+groupadd liubin
+2.创建用户加入组
+useradd liubin -G/-g liubin
+3.创建用户密码
+passwd liubin
+4.下载mysql
+5.解压
+tar -zxvf *.tar -C /指定目录
+6.重命名
+mv xxx bbb
+7.安装
+./scripts/mysql_install_db --user=mysql --basedir=/usr/local/mysql/ --datadir=/usr/local/mysql/data/
+8.复制启动脚本到资源目录
+cp ./support-files/mysql.server /etc/rc.d/init.d/mysqld
+9.增加mysqld服务控制脚本执行权限
+chmod +x /etc/rc.d/init.d/mysqld 
+10.将mysqld服务加入到系统服务
+chkconfig --add mysqld
+11.service mysqld start和service mysqld stop  
+
+12、将mysql的bin目录加入PATH环境变量，编辑 ~/.bash_profile文件
+vim ~/.bash_profile  
+export PATH=$PATH:/usr/local/mysql/bin  
+source ~/.bash_profile  
+
+13.设置远程主机登录，注意下面的your username 和 your password改成你需要设置的用户和密码
+mysql>GRANT ALL PRIVILEGES ON *.* TO 'your username'@'%' IDENTIFIED BY 'your password' WITH  GRANT OPTION;  
+
+
+问题:
+linux 下安装mysql 提示please install the following Perl modules before executing ./scripts/mysql_install_
+解决方案:
+yum -y install autoconf 
+
+问题:mysql初始化出现：Installing MySQL system tables.../usr/local/mysql/bin/mysqld: error while loading shared
+解决方案:
+yum install libaio* -y
+yum -y install numactl
+
+问题:TIMESTAMP with implicit DEFAULT value is deprecated
+解决方案:
+vi /etc/my.cnf 
+在[mysqld]下添加一行explicit_defaults_for_timestamp=true
+
+
+GRANT ALL PRIVILEGES ON *.* TO 'liubin' @'%' IDENTIFIED BY '1105915292' WITH  GRANT OPTION; 

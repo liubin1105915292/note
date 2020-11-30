@@ -1,0 +1,19 @@
+1.HttpClient client = HttpClients.createDefault();
+2.HttpGet|HtppPost get = new HttpGet|HttpPost(url);
+3.
+//获取响应
+HttpResponse response = client.execute(get);
+//获取响应实体
+HttpEntity entity = response.getEntity();
+4.
+//获取响应流
+InputStream in = entity.getConentent;
+//获取响应字符串
+//String content = EntityUtils.toString(entity);
+
+可用于页面静态化，将动态页面先转换化html静态页面，获取到响应流可以利用FileOutputStream
+写成HTML文件
+
+1847252257
+
+http://life.cntaiping.com/secure/servlet/com.cntaiping.eservice.secure.servlet.ForwardServlet?method=modifyAcct&flag=wx

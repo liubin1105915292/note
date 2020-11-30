@@ -1,0 +1,189 @@
+Linux命令记录
+passwd  修改密码
+su  切换用户
+setup  配置
+init 3 退出图形界面
+init 5 返回图形界面
+查看linux多少位 getconf LONG_BIT
+安装软件：执行rpm -ivh rpm包名
+rpm -e --nodeps 要卸载的软件包
+pwd 显示当前目录信息
+ls -l == ll 显示目录信息
+ls -lh 文件大小
+rm -rf 删除目录 
+cp [-a]=[-rp] 后面接目标路径 完全复制
+mkdir -p  多层目录创建
+ls -lh 显示文件大小信息 [-d] 查看目录
+mv  如果源文件和目标文件在同一个目录下就是改名  否则就是剪切
+vi/vim 编辑命令,点击a或i进行编辑  然后按esc 输出:wq 保存并退出vi :w保存但不退出  :w! 强制保存,不退出vi :q不保存,退出vi,
+强制退出:q!
+解决乱码:export LC_ALL=zh_CN.GBK或export LANG= "zh_CN.gb2312 "  注意!等在/目录下
+tar -cvf 打包  -C 指定目录
+tar -xvf/-zxvf 解包 
+shutdown -r 5:30 & 重启
+shutdown -h now 立刻关机
+shutdown -c 取消命令
+
+whoami  查看当前登录的用户名
+hostname 查看主机名,也可以更改主机名  例如:hostname oldboy
+touch 创建文本文件,如果存在就改时间戳
+cat -n[显示行号] 查看文件内容
+echo 输出内容 
+>> 追加重定向 作用:可以追加文字到文件结尾
+> 重定向  作用:把文件内容清空,把要加的内容加到文件结尾
+不加/的路径是相对路径,从/开始的目录就叫绝对路径
+/data 意思:data目录本身和目录下面
+/data/ 意思:data目录下面
+
+粘贴快捷键 shift+insert  或ctril+v+shift
+grep  过滤命令  三剑客之一老三  过滤出/掉字符串 -v [字符串] [目标文件]
+head [-n 1]==-1 liu.txt  查看文件第一行 ,你指定默认十行
+sed -e '/oldboy/d' liu.txt  删除包含oldboy的行,对于文件的增删改查都可以
+tail  查看文件的尾部-n指定查看多少行,默认十行
+yum install -y 文件  安装文件
+ls -a  可以显示隐藏文件   .a这样前面带点的就是隐藏文件
+alias  查看别名
+seq  添加序列号  主要用来生成测试文件
+sed -n '10,20p' /tmp/liu.txt   输出10-20行
+find  查找  -type 文件类型  -name 名称找 -exec 执行文件 
+find /tmp type f -name "*.txt"
+top 查看内存使用情况
+
+关闭防火墙
+sudo service iptables stop/status
+关闭防火墙自动启动
+sudo chkconfig iptables off
+sudo chkconfig iptables --list  查看各个启动级别的启动状态
+
+du -sh *  以兆的形式显示文件大小
+2017/3/12
+locale  显示当前支持的语言语系
+文件详细属性 [权限] [连接点]  [拥有者]  [群组] [档案容量] [最后修改时间] [文件名]
+其中权限有十个位子 第一个是文件类型 d代表目录 -代表文件 l代表链接文件 b代表周边设备  c是如键盘鼠标类设备
+chgrp  改变文件群组  例如:chgrp users 目录名/文件名  users群组名必须存在/etc/group中
+chown  改变文件拥有者  
+chmod 修改文件权限  r=4 w=2 x=1 -=0  所以修改权限的:chmod 777[所有权限6] 目录/文件名 
+
+uname  打印系统信息  -r   查看核心版本  -m  查看操作位数
+file /bin/ls   查看linux是多少位的
+
+解压tar.gz : tar -xvf xxx.tar.gz -C /home/xxx	
+压缩   tar -zcvf 
+linux用冒号分隔
+export JAVA_HOME=/tpdata/jdk8/jdk1.8.0_131
+export PATH=$JAVA_HOME/bin:$PATH
+export CLASSPATH=.:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar
+使配置文件生效 source /etc/profile
+/sbin/iptables -I INPUT -p tcp --dport 8080 -j ACCEPT
+
+iptables -I INPUT -p tcp --dport 7001 -j ACCEPT  开启linux端口
+二 开启80端口
+
+在Linux系统上使用XAMPP搭建一个BUGFREE系统时为了使外网能够访问此系统，需要linux服务器开启80端口。我使用了一下方法：
+
+(1)用vi打开防火墙的配置文件
+
+vi /etc/sysconfig/iptables
+
+文件内容如下：
+# Firewall configuration written by system-config-firewall
+# Manual customization of this file is not recommended.
+*filter
+:INPUT ACCEPT [0:0]
+:FORWARD ACCEPT [0:0]
+:OUTPUT ACCEPT [0:0]
+-A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
+-A INPUT -p icmp -j ACCEPT
+-A INPUT -i lo -j ACCEPT
+-A INPUT -m state --state NEW -m tcp -p tcp --dport 22 -j ACCEPT
+-A INPUT -j REJECT --reject-with icmp-host-prohibited
+-A FORWARD -j REJECT --reject-with icmp-host-prohibited
+COMMIT
+
+在次文件中添加 -A INPUT -m state --state NEW -m tcp -p tcp --dport 80 -j ACCEPT
+位置放在上边文件 -A INPUT -m state --state NEW -m tcp -p tcp --dport 22 -j ACCEPT
+下边。
+
+（2）重启
+
+/etc/init.d/iptables restart
+
+到此配置成功。
+
+
+Linux安装JDK实践
+1.使用getconf LONG_BIT查看linux系统位数
+2.到http://www.oracle.com/下载jdk对应的rpm软件包
+3.使用rpm -ivh 软件包名进行软件安装，安装的文件将会自动放在/usr目录下
+4.配置环境变量，vi /etc/profile  
+JAVA_HOME=/usr/java/jdk1.8.0_25/
+PATH=$JAVA_HOME/bin:$PATH
+CLASSPATH=.:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar
+export JAVA_HOME
+export PATH
+export CLASSPATH
+5.重启配置  source /etc/profile
+6.测试  java -version
+
+chown -R 用户名 目录  递归改变文件所属用户
+
+linux为用户授权
+新建用户：useradd 用户名
+为用户设密码： passwd 用户名
+删除用户：userdel 用户名
+修改用户名   usermod -l 新用户名 -d /home/新用户名 -m 老用户名
+查看组  cat /ect/group
+二、用户组：
+6、命令 groupadd创建用户组
+groupadd –g 888 users
+创建一个组users，其GID为888
+7、命令 gpasswd为组添加用户
+只有root和组管理员能够改变组的成员：
+例：把 user1加入users组
+gpasswd –a user1 users
+例：把 user1退出users组
+gpasswd –d user1 users
+8、命令groupmod修改组
+groupmod –n user users       修改组名user为users
+9、groupdel删除组
+groupdel users    删除组users
+
+要加入多个组需要用usermod命令，加入的其实是副组，具体命令为：usermod -a -G 组名1,组名2,... 用户名。下面小编把root用户加到nogroup组。
+
+要把用户从分组移除需要使用gpasswd -d user group命令。
+
+id 用户名   查看用户所在组
+
+make && make install 编译文件
+
+netstat -ant 查看端口
+export 查看环境变量
+
+编辑配置文件
+vim /etc/profile
+source /etc/profile (重新激活)  	
+
+安装jdk:
+1.查看系统是否安装jdk: yum list installed |grep java
+2.删除系统jdk: yum remove 文件名称
+3.查看yum库中jdk:yum -y list java*    [yum -y]表示自动选择y
+4.
+
+exit 退出用户
+
+修改ip
+该配置文件 /etc/sysconfig/network-scripts/ifcfg-eth0 
+改完之后重启 sudo service network restart或者reboot重启服务
+
+修改主机名:
+sudo /etc/sysconfig/network  然后使用exit退出用户在重新登录 hadoop都是通过主机名来映射的
+
+修改host文件
+sudo /etc/hosts
+ping 主机名
+
+sudo 使用root权限执行命令之后返回普通用户
+vi /etc/sudoers   让普通用户执行sudo权限  例如 hadoop  ALL=(ALL)  ALL
+vi /etc/inittab   修改默认启动界面
+
+

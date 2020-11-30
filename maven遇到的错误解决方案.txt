@@ -1,0 +1,18 @@
+问题:DescriptionResourcePathLocationType The type org.springframework.context.ConfigurableApplicationContext cannot be resolved. 
+It 
+is indirectly referenced from required .class filesMain.java/springBoots/src/main/java/controllerline 18Java Problem
+
+方案:
+在命令行中转到项目目录。
+确保您的POM.xml与您的命令行在同一个目录中
+运行命令 mvn dependency:purge-local-repository
+如果您收到构建成功的消息，表示错误已解决。
+如果仍然存在错误，请删除（?/ .m2 / repository / org / springframework）文件夹并运行 mvn package
+它现在可以正常工作
+
+问题:
+DescriptionResourcePathLocationType Archive for required library: 
+'E:/repository/org/springframework/spring-webmvc/4.3.13.RELEASE/spring-webmvc-4.3.13.RELEASE.jar' in project 'springBoots' 
+cannot be read or is not a valid ZIP filespringBootsBuild p
+
+方案:报道目标jar包删除重新下载

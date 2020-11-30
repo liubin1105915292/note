@@ -1,0 +1,28 @@
+使用weblogic服务器时候,在web.xml配置
+   <servlet>
+  		<servlet-name>ServletServlet</servlet-name>
+  		<servlet-class>weblogic.servlet.ServletServlet</servlet-class>
+  		<load-on-startup>0</load-on-startup>
+  </servlet>
+  <servlet-mapping>
+  		<servlet-name>ServletServlet</servlet-name>
+  		<url-pattern>/servlet/*</url-pattern>
+  </servlet-mapping>  
+
+就可以直接根据类路径访问该类,不需要增加额外映射
+
+
+账号:weblogic
+密码:weblogic123
+
+
+如何启动子服务器:(新建的服务器)
+首先启动管理服务器  startWebLogic.cmd
+1.找到E:\webLogic\user_projects\domains\base_domain\bin 的startManagedWebLogic.cmd命令
+2.startManagedWebLogic.cmd  [子服务器名称] [主服务器ip地址和端口]  不能写localhost
+例如 startManagedWebLogic.cmd sevice-01 http:127.0.0.1:7001(如果是本地可以省略)
+
+集群:找到tool工具E:\webLogic\oracle_common\common\bin\config.cmd  
+流程走下来只需要点击http协议   完成后在base-domain生成apps文件
+
+注意:主服务器和代理服务器不要部署项目  主服务器用来启动子服务器,代理服务器用来转发请求

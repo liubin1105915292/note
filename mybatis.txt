@@ -1,0 +1,38 @@
+主配置文件:
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+mapper映射文件:
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+工作空间与接口绑定:
+工作空间主要是用来区分同名的id
+1.mapper映射文件namespace是接口全类名
+2.接口方法名与映射文件查询id一致
+
+
+
+<mappers>
+		<mapper resource="com/bjpowernode/dao/IStudentDao.xml"/>
+</mappers>
+
+占位符:id=#{id}
+拼接符:${tableName}
+使用Map传参数:key需要和sql查询条件名一致
+注意:在定义与数据库字段一致的实体属性时不能用基本类型,需要用包装类型
+
+mysql拼接%: concat("%",#{name},"%")
+oracle拼接%: "%"||#{name}||"%"
+
+关于字段与属性名不一致的映射
+<select id="queryList" resultMap="stuMap">
+	select id,name,age from user
+</select>
+<resultMap type="user" id="stuMap">
+	<id column="name" property="id"/>
+	<result column="name" property="sname"/>
+	<result column="age" property="sage"/>
+</resultMap>

@@ -1,0 +1,200 @@
+spark1-3 用户名:root 1105915292
+
+http://www.apache.org/dist/hadoop/core/
+1.设置网卡
+ifconfig eth0 192.168.1.10
+vi /etc/sysconfig/network-script/ifcfg-eth0
+ONBOOT=YES
+IPADDR=192.168.1.10
+NETMASK=255.255.255.0
+GATEWAY=192.168.1.1
+
+重启网卡
+service network restart
+
+2.关闭防火墙
+service iptables stop
+chkconfig iptables off
+chkconfig iptables --list
+vi /etc/selinux/config
+SELINUX=disabled
+
+3.配置DNS服务器
+vi /etc/resolv.conf
+nameserver 192.168.1.1
+
+4.设置域名
+vi /etc/hosts
+192.168.1.9 spark1
+192.168.1.13 spark2
+192.168.1.12 spark3
+
+
+5.修改repo
+cd /etc/yum.repos.d/
+rm -rf *
+将自己的repo放入/etc/yum.repos.d/目录
+修改repo文件,将所有gpgcheck属性改为0
+
+6.配置yum
+yum clean all
+yum makecache
+yum install telnet
+
+7.安装jdk
+export JAVA_HOME=/usr/local/jdk1.8.0_171
+export PATH=$JAVA_HOME/bin:$PATH
+export CLASSPATH=.$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar
+
+8.免密码登陆
+1.本地免密码
+ssh-keygen -t rsa
+默认目标/root/.ssh
+cd /root/.ssh
+cp id_rsa.pub authorized_keys
+2.别的机子免密码
+ssh-copy-id -i spark2
+
+9.安装hadoop并配置环境变量
+
+10.拷贝配置好的一台hadoop到别的机器
+scp -r /usr/local/hadoop root@spark2:/usr/local
+
+
+export HADOOP_HOME=/usr/local/hadoop
+export JAVA_HOME=/usr/local/jdk1.8.0_171
+export PATH=$JAVA_HOME/bin:$PATH:$HADOOP_HOME/bin:$HADOOP/sbin
+export CLASSPATH=.$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar
+
+11.安装hive,配置环境变量
+
+12.安装mysql
+yum install -y mysql-server
+启动:service mysqld start
+chkconfig mysqld on
+安装mysql的connector
+yum install -y mysql-connector-java
+拷贝connector到hive
+cp /usr/share/java/mysql-connector-java-5.1.17.jar /usr/local/hive/lib/
+在mysql上创建hive元数据,并对hive进行授权
+mysql
+create database if not exists hive_metadata;
+grant all privileges on hive_metadata.* to 'hive'@'%' identified by 'hive';
+grant all privileges on hive_metadata.* to 'hive'@'localhost' identified by 'hive';
+grant all privileges on hive_metadata.* to 'hive'@'hadoop1' identified by 'hive';
+grant all privileges on hive_metadata.* to 'hive'@'spark1' identified by 'hive';
+flush privileges;
+use hive_metadata;
+
+13.配置hive-site.xml,在conf目录下
+mv hive-default.xml.template  hive-site.xml
+
+<property>
+        <name>hive.metastore.warehouse.dir</name>
+        <value>/home/local/hive-metastore-dir/warehouse</value>
+
+      </property>
+
+    <property>
+      <name>javax.jdo.option.ConnectionURL</name>
+      <value>jdbc:mysql://spark1:3306/hive?createDatabaseIfNotExist=true</value>
+    </property>
+    <property>
+      <name>javax.jdo.option.ConnectionDriverName</name>
+      <value>com.mysql.jdbc.Driver</value>
+    </property>
+    <property>
+      <name>javax.jdo.option.ConnectionUserName</name>
+      <value>user</value>
+    </property>
+    <property>
+      <name>javax.jdo.option.ConnectionPassword</name>
+      <value>password</value>
+    </property>
+重命名
+ mv hive-env.sh.template hive-env.s
+
+13.修改在bin目录下hive-config.sh,添加环境变量
+export JAVA_HOME=/usr/local/jdk1.8.0_171
+export HIVE_HOME=/usr/local/hive
+export HADOOP_HOME=/usr/local/hadoop
+
+注意版本
+
+
+14.安装zookeeper   配置环境变量
+cd /conf 
+mv zoo_sample.cfg zoo.cfg
+vi zoo.cfg
+dataDir=/usr/local/zookeeper/data
+server.0=spark1:2888:3888
+server.1=spark2:2888:3888
+server.2=spark3:2888:3888
+
+2.mkdir data
+cd data
+vi myid
+0
+3.将zk拷贝到别的节点
+scp -r zookeeper root@spark2:/usr/local
+scp -r zookeeper root@spark3:/usr/local
+修改配置文件
+修改对应的myid 分别为 0 1 2 
+分别在三台机子上启动
+zkServer.sh start
+
+检查:zkServer.sh status  有follower和leader
+
+zkcli.sh进入zk命令行
+
+15.安装scala
+
+16.安装kafka,不需要配置环境变量
+cd kafka/config/
+vi server.properties 
+broker.id=0  依次增长
+修改zookeeper.connect=192.168.1.9:2181,192.168.1.12:2181,192.168.1.13:2181
+
+17.安装slf4j-nop-1.7.6.jar
+ wget http://central.maven.org/maven2/org/slf4j/slf4j-nop/1.7.21/slf4j-nop-1.7.21.jar   注意:新版本可能不需要这个
+将该jar包放入kafka/lib中
+
+将kafka拷贝到别的节点
+scp -r kafka root@spark:/usr/local
+并修改broker.id
+
+启动kafka集群
+在三台机器上分别执行命令,必须在kafka安装目录下执行:
+nohup bin/kafka-server-start.sh config/server.properties &
+
+测试kafka命令
+bin/kafka-topics.sh --zookeeper 192.168.1.9:2181,192.168.1.12:2181,192.168.1.13:2181 --topic TestTopic --replication-factor 1 --partitions 1 --create
+
+bin/kafka-console-producer.sh --broker-list 192.168.1.9:9092,192.168.1.12:9092,192.168.1.13:9092 --topic TestTopic
+克隆session
+创建kafka Consumer
+bin/kafka-console-consumer.sh --zookeeper 192.168.1.9:2181,192.168.1.12:2181,192.168.1.13:2181 --topic TestTopic --from-beginning
+
+16.安装spark1.6配置环境变量
+修改配置文件
+cd /usr/local/spark/conf
+mv spark-env.sh.template spark-env.sh
+mv slaves.template slaves
+
+新增:
+export JAVA_HOME=/usr/local/jdk1.8.0_171
+export SCALA_HOME=/usr/local/scala
+export SPARK_MASTER_IP=192.168.1.9
+export SPARK_WORKER_MEMORY=1g
+export HADOOP_CONF_DIR=/usr/local/hadoop/etc/hadoop/
+
+vi slaves=>
+spark2
+spark3
+
+启动spark,必须到spark/sbin目录下
+./start-all.sh
+控制台:
+http://spark1:8080/
+进入spark-shell
+命令:spark-shell

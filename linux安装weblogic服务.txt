@@ -1,0 +1,97 @@
+1.下载weblogic通用fmw_12.2.1.3.0_wls.jar
+2.创建weblogic用户
+3.在某一目录下创建wls.rsp和oralnst.loc文件   第一次需要创建,一般放在/etc/目录下
+
+例如/home/weblogic/myweblogic/wls.rsp和/home/weblogic/myweblogic/oralnst.loc
+
+4.oralnst.loc文件写入
+
+
+inventory_loc=/home/weblogic/oraInventory1    产品清单目录
+#用户的组名称，根据实际的修改
+inst_group=weblogic                           组名称
+
+wls.rsp文件写入
+[ENGINE]
+#DO NOT CHANGE THIS.
+Response File Version=1.0.0.0.0
+[GENERIC]
+#weblogic的安装路径，根据自己的需要修改
+ORACLE_HOME=/home/weblogic/Oracle/Middleware   
+#Set this variable value to the Installation Type selected. e.g. WebLogic Server, Coherence, Complete with Examples.
+INSTALL_TYPE=WebLogic Server
+
+
+5.执行命令
+java -jar /home/weblogic/weblogiczip/fmw_12.2.1.3.0_wls.jar -silent -responseFile /home/weblogic/myweblogic/wls.rsp -invPtrLoc /home/weblogic/myweblogic/oralnst.loc
+
+6.配置环境变量
+./home/weblogic/Oracle/Middleware/wlserver/server/bin/setWLSEnv.sh
+
+7.手动创建base_domain域
+/home/weblogic/Oracle/Middleware/user_projects/domain/base_domain
+
+7.1在创建域之前，先修改Linux下的Java生成随机数  不然执行不了第8步
+
+cd $JAVA_HOME/jre/lib/security
+vi java.security
+
+# securerandom.source=file:/dev/urandom
+# 修改为
+# securerandom.source=file:/dev/./urandom
+
+8.进入如下目录 执行命令
+cd /home/weblogic/Oracle/Middleware/oracle_common/common/bin  目录下 
+./commEnv.sh
+./wlst.sh 
+
+
+
+9.安装如下安装配置
+selectTemplate('/home/weblogic/Oracle/Middleware/wlserver/common/templates/wls/wls.jar')
+或者
+readTemplate('/home/weblogic/Oracle/Middleware/wlserver/common/templates/wls/wls.jar')
+cd('Servers/AdminServer')
+set('ListenAddress','172.17.0.5')   //需要配置内网地址
+set('ListenPort', 7001) 
+cd('/')
+cd('Security/base_domain/User/weblogic')
+cmo.setPassword('weblogic123')    #设置控制台登录密码
+setOption('OverwriteDomain', 'true')
+writeDomain('/home/weblogic/Oracle/Middleware/user_projects/domain/base_domain')   #域存放目录
+setOption('JavaHome', '/usr/local/jdk')  制定java
+closeTemplate()
+exit()   
+
+10.进入
+/home/weblogic/Oracle/Middleware/user_projects/domain/base_domain/bin  目录下启动服务
+./startWebLogic.sh  该命令窗口关闭服务停止需要使用nohup命令
+- 后台启动使用nohup ./startWebLogic.sh &
+./stopWeblogic.sh    -- 关闭weblogic
+
+11开启7001端口
+vi /etc/sysconfig/iptables
+iptables -I INPUT -p tcp --dport 7001 -j ACCEPT  开启linux端口
+
+service iptables restart
+
+
+ <"ResourceManagement" is not enabled in this JVM. Enable "ResourceManagement" to use the WebLogic Server "Resource Consumption Management" feature. To enable "ResourceManagement", you must specify the following JVM options in the WebLogic Server instance in which the JVM runs: -XX:+UnlockCommercialFeatures -XX:+ResourceManagement.> 
+当被管服务器出去启动不了的情况,在startWeblogic.sh中添加:
+WLS_USER="weblogic"
+export WLS_USER
+WLS_PW="weblogic123"
+export WLS_PW
+
+
+
+
+
+
+
+
+
+
+
+
+netstat -ntlp   查看正在运行的端口

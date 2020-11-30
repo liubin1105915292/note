@@ -1,0 +1,5 @@
+创建用户:db.createUser({user:"liubin",pwd:"1105915292",roles:[{role:"root",db:"admin"}];
+首先进入admin表 use admin
+db.auth("liubin","1105915292");
+创建数据库
+use 数据库名  // 存在则使用,不存在就创建

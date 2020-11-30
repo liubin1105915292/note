@@ -1,0 +1,52 @@
+1.sql中in和exist怎么选择?
+in是把外表和内表[子查询表]作hash连接,而exists是对外表作loop循环,每次loop循环再对内表进行查询
+in适合于外表大而内表小的情况,exists适合于外表小而内表大的情况
+2.全选与取消全选怎么用一句话来表示?
+ $("input:checkbox[name='chk']").prop("checked",$("#checkAll").prop("checked")); 
+3.nginx具体怎么配置的?
+
+oracle 账户名为邮箱 密码LiuBin13879890901
+
+mysql的主从数据库配置:
+1.修改主库的my.ini,在[mysqlld]添加二进制日志和server-id
+log-bin=C:/Program Files/mysql/mysqlServer/mysql-bin.log
+server-id=1
+2.修改从数据库slaver,添加server-id
+server-id=2
+3.重启两个mysql数据库
+4.登录主库为从库授权
+命令:grant replication slave on *.* to 'root'@'localhost' identified by 'root'
+5.查看主库状态
+命令:show master status
+可以看到file和position两个属性值
+6.配置从库
+命令:changer master to master_host='localhost',master_user='root',master_password='root'
+master_file='属性值',master_position='属性值'
+7.启动从库
+start slaver
+
+mysql_proxy读写分离
+1.安装mysql_proxy文件,配置环境变量
+2.在mysql_proxy的bin目录下新建一个mysql_proxy.conf文件
+写入:
+[mysql-proxy]
+proxy-address=127.0.0.1:4040
+proxy-backend[后台]-address=localhost:3306
+proxy-read-only-backend-addresses=localhost:3307
+proxy-lua-script=splittion.lua
+3.为mysql-proxy建立系统服务
+命令:
+sc create "MySQL Proxy" DisplayName="MySQL Proxy" start="auto" binPath="..."	
+
+
+Tomcat集群配置的session问题
+对于web应用集群技术实现而言,最大的难点就是如何能在集群中的多个节点之间保持数据的一致性,session信息
+就是数据中最重要的一块.要实现这一点,大体上有两种方式,一种是把所有session数据放到一台服务器上或者数据库中
+集群中的所有节点通过访问这台session服务器来获取数据
+另一种就是集群中的所有节点间进行session数据的同步拷贝,任何一个节点均保存了所有的session数据.
+Tomcat通过SimpleTcpcluster类进行基于内存的会话复制.Tomcat Cluster通过组播方式决定组成成员关系,每一个节点
+在启动时和运行时都会有规律地发送组播心跳包,同一个cluster内的节点会在相同的组播地址和端口监听这些信息.
+
+场景:t1Tomcat标准的tomcat启动,当Host对象被创建了,一个cluster对象也同时被关联到这个host对象.
+然后启动t2服务器,然后simpleTcpCluster会建立了一个由t1和t2组成的membership.接着t2向集群中已启
+动的服务器即t1请求session数据,如果t1没有响应t2的拷贝请求,t2会在60秒后timeout.

@@ -1,0 +1,67 @@
+##############安装###############
+将redis安装包放到/var/local/redis目录
+1.解压 tar -zxvf ***.tar.gz
+2.  cd 到redis解压目录
+3.执行  make命令,编译完后会出现src目录和redis.conf文件
+4.cd src   执行make install 安装
+
+################部署##########
+1、首先为了方便管理，将Redis文件中的conf配置文件和常用命令移动到统一文件中
+
+a)创建bin和redis.conf文件
+
+代码如下:
+mkdir -p /var/local/redis/redis-3.2.4/bin
+mkdir -p /var/local/redis/redis-3.2.4/ect
+
+b)执行Linux文件移动命令：
+
+代码如下:
+mv redis.conf ect/
+cd /src
+mv mkreleasdhdr.sh redis-benchmark redis-check-aof redis-check-dump redis-cli redis-server /usr/local/redis/bin
+
+启动./redis-server
+
+后台启动redis
+cd /etc
+vi redis.conf  daemonize 属性改为yes
+
+再次启动redis服务，并指定启动服务配置文件
+redis-server /usr/local/redis/etc/redis.conf
+
+启动客户端 redis-cli   
+关闭 shutdown / 退出客户端quit
+关闭redis服务 redis-cli -h 127.0.0.1 -p 6379 shutdown
+
+
+##########################开放外网访问##############
+1.开放端口: vi /etc/sysconfig/iptables
+iptables -I INPUT -p tcp --dport 6379 -j ACCEPT
+重启防火墙: service iptables restart
+2.修改配置redis.conf
+注释#bind 127.0.0.1
+禁用保护模式
+protected-mode no
+
+################设置密码############
+1.查看密码==>进入控制台 config get requirepass
+修改配置文件
+# requirepass foobared
+requirepass yourpassword  //此处注意，行前不能有空格
+登陆:
+redis-cli -h 127.0.0.1 -p 6379 -a 110591529
+
+
+#####################异常#################
+cd src && make all
+make[1]: Entering directory `/root/dufy/redis/redis-3.0.4/src'
+    CC adlist.o
+在包含自 adlist.c：34 的文件中:
+zmalloc.h:50:31: 错误：jemalloc/jemalloc.h：没有那个文件或目录
+zmalloc.h:55:2: 错误：#error "Newer version of jemalloc required"
+make[1]: *** [adlist.o] 错误 1
+make[1]: Leaving directory `/root/dufy/redis/redis-3.0.4/src'
+make: *** [all] 错误 2
+###############解决方案###########
+先执行:make distclean

@@ -1,0 +1,90 @@
+web.xml
+
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" id="WebApp_ID" version="3.0">
+  <display-name>create-ssm</display-name>
+  <!--指定spring配置文件的位置及文件名  -->
+  <context-param>
+  		<param-name>contextConfigLocation</param-name>
+  		<param-value>classpath:resource/spring-*.xml</param-value>
+  </context-param>
+  <listener>
+  		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+  </listener>
+  <!-- 注册字符编码器 -->
+  <filter>
+  		<filter-name>encoding</filter-name>
+  		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+  		<init-param>
+  			<param-name>encoding</param-name>
+  			<param-value>utf-8</param-value>
+  		</init-param>
+  		<init-param>
+  			<param-name>forceEncoding</param-name>
+  			<param-value>true</param-value>
+  		</init-param>
+  </filter>
+  <filter-mapping>
+  		<filter-name>encoding</filter-name>
+  		<url-pattern>/*</url-pattern>
+  </filter-mapping>
+  <!--注册中央调度器  -->
+  <servlet>
+  		<servlet-name>springMVC</servlet-name>
+  		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+  		<init-param>
+  			<param-name>contextConfigLocation</param-name>
+  			<param-value>classpath:resource/spring-mvc.xml</param-value>
+  		</init-param>
+  		<load-on-startup>1</load-on-startup>
+  </servlet>
+  
+  <servlet-mapping>
+  		<servlet-name>springMVC</servlet-name>
+  		<url-pattern>*.do</url-pattern>
+  </servlet-mapping>
+</web-app>
+
+
+mybatis.xml-config
+
+ 
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+<properties resource="jdbc.properties"/>
+<settings>
+	<setting name="logImpl" value="STDOUT_LOGGING"/>
+	</settings>
+<typeAliases>
+	<typeAlias type="com.bjpowernode.Student" alias="student"/>
+</typeAliases>
+<environments default="dev">
+	<environment id="dev">
+		<transactionManager type="jdbc"/>
+		<dataSource type="POOLED">
+				<property name="driver" value="${jdbc.driver}"/>
+				<property name="url" value="${jdbc.url}"/>
+				<property name="username" value="${jdbc.username}"/>
+				<property name="password" value="${jdbc.password}"/>
+		</dataSource>
+	</environment>
+</environments>
+<mappers>
+	<mapper resource="com/bjpowernode/student.xml"/>
+	<mapper resource="com/bjpowernode/dao/IStudentDao.xml"/>
+</mappers>
+</configuration>
+mapper.xml
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="user">
+		<select id="queryStudent" resultType="com.bjpowernode.Student" >
+			select * from t_student where id=1
+		</select>
+		<select id="queryList" resultType="com.bjpowernode.Student">
+			select * from t_student where name=#{name}
+		</select>
+</mapper> 

@@ -1,0 +1,26 @@
+#####################安装##############
+1.下载mongodb安装包放到/usr/local/mongodb
+2.配置环境变量 MONGODB_HOME
+export MONGODB_HOME=/usr/local/mongdb/mongodb4.0.3/
+export PATH=$PATH:$MONGODB_HOME/bin
+3.在bin目录下创建mongodb.conf
+dbpath = /usr/local/mongdb/mongodb4.0.3/mongdb_data
+logpath= /usr/local/mongdb/mongodb4.0.3/mongdb_logs
+bind_ip=0.0.0.0  #可以外网访问
+port=27017
+logappend=true
+fork=true
+auth=true  #开启验证
+4.创建mongdb_data目录和mongdb_logs文件
+
+
+##############启动#############
+./mongod -f mongodb.conf
+查看是否已启动
+netstat -lanp |grep "27017"
+
+###############启动客户端##########
+mongo
+
+
+集群搭建:https://yq.aliyun.com/articles/422597?spm=a2c4e.11155472.0.0.ad0d55d8PCpSNN

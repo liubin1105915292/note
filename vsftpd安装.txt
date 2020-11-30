@@ -1,0 +1,6 @@
+1.查看否是安装了vsftpd
+rpm -qa|grep vsftpd
+如何没有安装
+yum -y install vsftpd
+
+15884713561

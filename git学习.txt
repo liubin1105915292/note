@@ -1,0 +1,78 @@
+先提交到本地,在提交到远程
+本地:
+创建git目录 
+mkdir testgit
+初始化git
+git init
+git init –bare  建立裸仓库
+git add .      提交被修改的和新建的文件，但不包括被删除的文件                            
+git branch -m [原分支名] 新分支名    修改分支名
+
+git add -u     --update  l更新所有改变的文件，即提交所有变化的文件
+git clone -b v2.8.1 https://git.oschina.net/oschina/android-app.git  从指定分支拉取代码
+git add -A    --all      提交已被修改和已被删除文件，但是不包括新的文件
+git add --all
+git add/rm filename  提交到缓存区
+git commit -m '提交描述'
+10.7.160.122:/billcard
+10.7.160.122:/billcard_web
+10.7.160.122:/billcard_webservice
+git remote add origin git@Nquery@10.7.160.122:/tpl-wiseye-srv
+git remote add origin git@github.com:liubin1105915292/lb_git.git  添加远程仓库
+git remote add origin file:///E:/Git/myproject/remoteRep  本地作为远程仓库
+git remote -v  查看当前remote URL
+
+git reset HEAD <file> 来取消缓存区的修改。不添加<file>参数，撤销所有缓存区的修改。
+
+git push -u origin master  同步到远程仓库/master是主分支,可以选择其他分支
+
+如果push时候找错 ! [rejected]        master -> master (non-fast-forward)
+则需要执行
+git pull --rebase origin master    //将仓库代码同步到本地
+
+//删除远程仓库
+git remote rm origin 
+
+git pull 获取远程仓库数据   需要本地仓库git status无任何提交或更改
+
+git branch  查看分支
+git branch mystudygit1.0 创建分支
+git checkout mystudygit1.0 切换分支
+
+ 删除分支
+git branch -d mystudygit1.0  //如果该分支没有合并到主分支会报错
+或者
+git branch -D mystudygit1.0   //强制删除
+
+git branch -r  查看远程端的分支情况  
+git checkout -b dev  从已有的分支创建新的分支(如从master分支),创建一个dev分支
+
+git push origin dev 提交分支到远程
+git push origin --delete dbg_lichen_star  删除远程分支
+
+git merge wangtingv1.0  当前分支合并wangting1.0分支
+git push origin master  当本地分支提交到远程分支   也就是合并远程分支
+
+删除本地仓库文件后执行git commit -a
+
+当删除本地仓库文件时候想重新从远程仓库获取:
+删除本地文件后，想从远程仓库中从新Pull最新版文件。
+Git提示：up-to-date，但未得到删除的文件
+原因：当前本地库处于另一个分支中，需将本分支发Head重置至master.
+git checkout master 
+git reset --hard
+git 强行pull并覆盖本地文件
+git fetch --all  
+git reset --hard origin/master 
+git pull
+
+
+当删除或修改本地文件后如何撤销
+1.未add到缓存区
+git checkout -- filename
+2.add到缓存区
+git reset head filename
+git checkout -- filename
+
+ git rm --cached “文件路径”，不删除物理文件，仅将该文件从缓存中删除；
+如果不加文件路径,则撤销所有

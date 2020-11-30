@@ -1,0 +1,58 @@
+方法1:获取用户输入函数:raw_input();  eq:  str = raw_input("请输入字符串:")  返回的是字符串
+id() 获取变量的地址
+print(x,y,z)  可以输出多个变量
+print(format(val,fomat))  格式化输出  eq:print(format(3.12451,'6,2f'))  输出六位保留两位小数
+如何去掉f则只输出2位,不足的小数位数自动补0
+int(value) 可以将字符串转为int
+float(value) 
+type(value )  返回数据类型
+str(value)  转为字符串
+print x,  逗号的作用可以是下一个输出连接到本行输出,所以x和y占一行
+print y
+
+\可以换行继续输入
+
+比较: ==   is  
+bool()返回true或false   bool(0)返回false
+逻辑运算符: and or not
+
+x=12
+print 'x=',x      输出:x=12
+
+2.python变量分析
+python中的变量从左边开始运算,指向到右边内存单元
+python变量直接赋值定义变量  eq:x=12
+python中的变量类似C语音里的指针
+python中的变量是指向内存单元的,所有的数据类型都是指向内存单元,所以
+python数据没有类型
+eq:x=12  x这时候指向12的内存单元
+    x=13,x指向13的内存单元,而不是将12的内存单元改变成13
+java语言中一旦声明一个变量,则其内存地址不能改变,而python是可以变得
+
+
+#############字符串操作
+str = 'Hello World!'
+ 
+print str           # 输出完整字符串
+print str[0]        # 输出字符串中的第一个字符
+print str[2:5]      # 输出字符串中第三个至第五个之间的字符串
+print str[2:]       # 输出从第三个字符开始的字符串
+print str * 2       # 输出字符串两次
+print str + "TEST"  # 输出连接的字符串
+
+如何截取中文字符串:
+s = u'中文截取'
+s.decode('utf8')[0:3].encode('utf8')
+# 结果u'中文截取
+
+dict = {'Name': 'Zara', 'Age': 7, 'Class': 'First'};
+ 
+del dict['Name']; # 删除键是'Name'的条目
+dict.clear();     # 清空词典所有条目
+del dict ;        # 删除词典
+ 
+print "dict['Age']: ", dict['Age'];
+print "dict['School']: ", dict['School'];
+	
+python三目运算
+name='liubin' if 1==1 else 'sb'

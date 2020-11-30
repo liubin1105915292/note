@@ -1,0 +1,8 @@
+查看所有key :keys *  ;匹配前缀keys : keys “miao*”
+清空redis: flushdb
+随机取出一个keys: randomkey
+查看key的类型：type key
+查看数据库中的key数量：dbsize
+查看服务器信息：info
+查看redis正在做什么：monitor
+查看日志：showlog  get

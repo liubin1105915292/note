@@ -1,0 +1,96 @@
+﻿1.class="lead" 增大效果
+2.class="list-unstyled" 取消li的点点
+3.class="list-inline"  水平显示
+4.class="text-left/center/right"  文字位置
+5.class="text-uppercase/lowercase" 字母大小写
+
+##Table
+class="table"  表格样式
+class="table-striped"  表格斑马线样式 基于table样式
+class="table-bordered" 表格边框
+class="table-hover" 鼠标悬停样式
+class="info/success" 不同信息颜色  基于tr/td标签
+class="table-responsive" 响应式表格,缩小会加边框
+
+ ##Button
+class="btn" 按钮样式   适用于a,	input,button标签  基于btn样式
+class="btn-default/success/info/warning/danger/primary/link"  不同按钮样式  基于btn
+class="btn-lg/sm/xs"  大/小/超小
+class="btn-block"  块级按钮 :占一整行
+class="btn avtive" 激活按钮
+class="btn disabled"  禁用按钮
+
+##表单和图片
+class="form-control" 行级显示,点击有阴影  可用于form和select
+class="form-inline/horizontal"  一行显示  用于form标签
+class="form-group/input-group"  分组间隔,用于div
+class="input-group-addon" 前后增加片段,用于div
+class="col-sm-数字"  
+class="control-label"  同步顶部样式
+class="checkbox/checkbox-inline/radio-inline disabled"  用于div 
+class="has-success"  成功了样式
+class="glyphicon glyphicon-ok/glyphicon-warning-sign/glyphicon-remove" 成功状态/警告状态/错误状态   用于span标签  其顶级div需要用到class="has-feedback"  将状态图片放入输入域
+#图片
+class="img-rounded" 圆角属性
+class="img-circle"  圆图属性
+class="img-thumbanil"  缩略图属性  常用
+class="img-responvise"
+
+##栅格系统  适用于不同系统间
+固定写法:
+<meta name="viewport" content="width=device-width,initial-scale=1,
+maximum-scale=1,user-scalable=no"/> 
+//布局容器
+//固定宽度
+<div class="container">...</div>
+//100%宽度
+<div class="container-fluid">...</div>
+这两个容器不能互相嵌套
+一般这样用:
+<div class="container"> //容器
+	<div class="row"> //一行
+		<div class="col-md-1 a"> //一行最多12个这样,其中1是可变的
+		...
+	</div>
+</div>
+
+.col-xs-数字 a 超小屏幕  手机
+.col-sm-数字 a 小屏幕  750px  平板
+.col-md-数字 a 中等屏幕 970px  桌面
+.col-lg-数字 a 大屏幕 >1200px  超大桌面
+可以同时使用
+class="col-md-offset-数字 " 移动几位 
+
+##辅助类和响应式样式
+#情景文本颜色 text-muted 柔和灰
+text-primary 主要蓝 text-succcess 成功绿 text-info 信息蓝
+text-warning 警告黄  text-danger 危险红
+#背景色只需要把text换成bg  bg-muted是没有用的
+<button>&times;</button> 关闭按钮
+class="close"  打X符号  显示在最后 
+class="caret"  三角符号  用于span
+class="pull-left/right a"  左右浮动
+class="center-block a"  区块居中
+class="clearfix"  清除浮动,放在浮动中间
+class="show/hiden"  显示/隐藏
+
+class="visible-xs-inline a"  超小屏幕激活显示
+class="hidden-xs a"  超小屏幕隐藏
+
+##下拉菜单
+<div class="dropdown/up open">
+	<button class="btn btn-default" data-toggle="dropdown">
+	下拉菜单
+	<span class="caret"></span>
+	</button>
+	<ul class="dropdown-menu">
+	<li><a href="#">首页</a></li>
+	<li><a href="#">咨询</a></li>
+	<li class="divider"><a href="#">产品</a></li>
+	<li class="disabled"><a href="#">关于</a></li> 
+	</ul>
+</div>
+class="divider"  分隔线
+class="disabled" 不可用
+
+

@@ -1,0 +1,14 @@
+安装nodejs  配置环境变量
+
+全局安装: npm i -g webpack;不推荐
+webpack -v;
+npm config ls ;查看npm配置信息
+1.npm init -y 初始化一个package.json文件
+2.npm i -D webpack   本地安装webpack
+
+3.如果安装webpack4+以上版本
+npm i -D webpack-cli  安装webpack命令行工具 4+版本需要
+npm i -D 是npm install --save-dev的缩写
+–save : 安装生产环境需要的依赖包
+–save-dev： 安装开发环境需要的依赖包
+4.npm i stylus-loader css-loader -D

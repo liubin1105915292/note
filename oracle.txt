@@ -1,0 +1,81 @@
+设置页面每行显示字符：set linesize 500   设置页面显示记录：set pagesize 60
+切换用户：conn 用户名[scott/tiger]
+list或l用来显示上一条缓存查询记录  run或r或/来执行  save上来保存记录 后面接路径
+get用来读取硬盘数据  edit或ed编辑缓存文件 clear scr或cle scr清屏
+null代表无穷大，可以表示任意值，例如where sal not in(300,500,null)的记录是空。、
+select * from tab;查看表 或者select table_name from user_tables;
+
+oracle的连接符为 '||'  别用要用""
+
+
+创建用户的过程
+使用系统管理员身份
+conn sys/bjpowernode as sysdba;
+conn system/bjpowernode
+查看用户数
+select username from dba_users;
+
+创建用户
+create user 用户名 identified by 密码
+alter user 用户名 identified by 密码 修改用户密码
+
+给用户解锁
+alter user 用户名 account unlock;  加锁alter user 用户名 account lock
+
+给用户授权
+grant create table,create view,create trigger,create session(连接数据库),unlimited tablespace
+(对表空间的使用) to 用户名
+
+创建表空间
+create tablespace 空间名 datafile '文件路径' size 50m
+
+将表空间分配给用户
+alter user 用户名 dafault tablespace 空间名
+
+
+SQL> select ename ||'年薪为:' ||(500+sal)*12 "员工的年薪" from emp;
+
+员工的年薪
+--------------------------------------------------------------------
+SMITH年薪为:15600
+ALLEN年薪为:25200
+WARD年薪为:21000
+JONES年薪为:41700
+MARTIN年薪为:21000
+BLAKE年薪为:40200
+CLARK年薪为:35400
+SCOTT年薪为:42000
+KING年薪为:66000
+TURNER年薪为:24000
+ADAMS年薪为:19200
+JAMES年薪为:17400
+FORD年薪为:42000
+MILLER年薪为:21600
+
+
+
+游标的使用
+
+语法:
+
+declare
+	cursor 游标名 is 查询语句
+	声明变量
+	open 游标名
+		fetch 游标名 into 变量
+
+	close 游标名
+
+
+
+
+
+
+
+
+
+
+
+
+
+
