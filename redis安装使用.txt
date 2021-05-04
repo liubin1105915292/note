@@ -1,0 +1,28 @@
+1.下载redis安装包
+
+
+安装gcc环境 
+yum install gcc-c++
+make
+
+安装6.0以上版本需要升级gcc到5.3及以上,如下：升级到gcc 9.3：
+yum -y install centos-release-scl
+yum -y install devtoolset-9-gcc devtoolset-9-gcc-c++ devtoolset-9-binutils
+scl enable devtoolset-9 bash
+需要注意的是scl命令启用只是临时的，退出shell或重启就会恢复原系统gcc版本。
+如果要长期使用gcc 9.3的话：
+echo source /opt/rh/devtoolset-9/enable /etc/profile
+这样退出shell重新打开就是新版的gcc了
+
+将配置文件copy并修改
+3.安装好后进入 cd /usr/local/bin
+
+修改后台启动模式
+daemonize yes
+
+4.启动redis
+redis-service --配置文件
+
+5.关闭redis服务 
+首先进入客服端,输入shutdown
+然后在输入exit

@@ -1,0 +1,31 @@
+﻿从自己网盘上下载好rabbitMq安装包,是linux系统的
+
+放入新建目录
+
+执行如下命令
+
+rpm -ivh erlang-22.0.7-1.el7.x86_64.rpm
+rpm -ivh socat-1.7.3.2-2.el7.x86_64.rpm
+rpm -ivh rabbitmq-server-3.7.18-1.el7.noarch.rpm
+
+cp /usr/share/doc/rabbitmq-server*/rabbitmq.config.example /ect/rabbitmq/rabbitmq.config
+
+修改配置文件
+只需要打开 {loopback_users}  61行
+然后启动rabbitmq后台管理插件
+执行如下命令
+rabbitmq-plugins enable rabbitmq_management
+
+1.关闭防火墙
+systemctl disable firewalld
+systemctl stop firewalld
+
+2.启动和停止rabbitmq服务
+systemctl start rabbitmq-server
+systemctl stop rabbitmq-server
+
+3.查看状态
+systemctl status rabbitmq-server
+
+4.访问控制台
+账号密码:guest
